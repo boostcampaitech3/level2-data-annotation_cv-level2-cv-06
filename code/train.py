@@ -49,11 +49,10 @@ def parse_args():
     parser.add_argument('--learning_rate', type=float, default=1e-3)
     parser.add_argument('--max_epoch', type=int, default=200)
     parser.add_argument('--save_interval', type=int, default=5)
-    parser.add_argument('--seed', type=int, default=42)
+    parser.add_argument('--seed', type=int, default=2022)
 
     parser.add_argument('--wandb_project', type=str, default="default")
     parser.add_argument('--wandb_interval', type=int, default=5)
-    parser.add_argument('--wandb_num_examples', type=int, default=5)
 
     args = parser.parse_args()
 
@@ -64,8 +63,7 @@ def parse_args():
 
 
 def do_training(data_dir, model_dir, device, image_size, input_size, num_workers, batch_size,
-                learning_rate, max_epoch, save_interval, seed, wandb_project, wandb_interval,
-                wandb_num_examples):
+                learning_rate, max_epoch, save_interval, seed, wandb_project, wandb_interval):
     
     seed_everything(seed)
     torch.cuda.empty_cache()
@@ -92,7 +90,6 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
     wandb.watch(model, log='all')
 
     model.train()
-    best_loss = 1e10
     for epoch in range(max_epoch):
         epoch_loss, epoch_start = 0, time.time()
         cls_loss, angle_loss, iou_loss = 0, 0, 0
@@ -111,7 +108,6 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
                 angle_loss += extra_info['angle_loss']
                 iou_loss += extra_info['iou_loss']
 
-                pbar.update(1)
                 val_dict = {
                     'Cls loss': extra_info['cls_loss'], 'Angle loss': extra_info['angle_loss'],
                     'IoU loss': extra_info['iou_loss']
@@ -129,6 +125,7 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
                     })
 
                 pbar.set_postfix(val_dict)
+                pbar.update(1)
 
         scheduler.step()
 
@@ -139,15 +136,6 @@ def do_training(data_dir, model_dir, device, image_size, input_size, num_workers
 
         print('Mean loss: {:.4f} Mean Cls loss: {:.4f} Mean Angle loss: {:.4f} Mean IoU loss: {:.4f}| Elapsed time: {}'.format(
             mean_loss, mean_cls_loss, mean_angle_loss, mean_iou_loss, timedelta(seconds=time.time() - epoch_start)))
-
-        if best_loss > mean_loss:
-            if not osp.exists(model_dir):
-                os.makedirs(model_dir)
-            
-            best_loss = mean_loss
-
-            best_ckpt_fpath = osp.join(model_dir, 'best_model.pth')
-            torch.save(model.state_dict(), best_ckpt_fpath)
 
         if (epoch + 1) % save_interval == 0:
             if not osp.exists(model_dir):
