@@ -49,7 +49,7 @@
 
 
 
-- ICDAR17 Korean 만 사용했을 때보다 외부 데이터를 추가할수록 private score에서 좋은 성능을 보였다.
+- ICDAR17 Korean 만 사용했을 때보다 외부 데이터를 추가할수록 private score에서 좋은 성능을 보였습니다.
 <br>
 
 ### 📌 Hyperparameter & Augmentation 관점
