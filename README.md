@@ -5,18 +5,16 @@
 
 ## 📝 글자 검출 대회
 ### 🔎 배경
-- 스마트폰으로 카드를 결제하거나, 카메라로 카드를 인식할 경우 자동으로 카드 번호가 입력되는 경우가 있습니다. 또 주차장에 들어가면 차량 번호가 자동으로 인식되는 경우도 흔히 있습니다. 
-- 이처럼 OCR (Optimal Character Recognition) 기술은 사람이 직접 쓰거나 이미지 속에 있는 문자를 얻은 다음 이를 컴퓨터가 인식할 수 있도록 하는 기술로, 컴퓨터 비전 분야에서 현재 널리 쓰이는 대표적인 기술 중 하나입니다.
-
-- OCR task는 글자 검출 (text detection), 글자 인식 (text recognition), 정렬기 (Serializer) 등의 모듈로 이루어져 있습니다.
+- 스마트폰으로 카드를 결제하거나, 카메라로 카드를 인식 하는 등 OCR은 실생활에서 널리 쓰이는 대표적인 기술입니다.
+- 해당 기술을 Model-Centric이 아닌 Data-Centric을 통해 모델 성능을 올리는 방법을 알아보고자 합니다.
 
 
 ---
 
 ### 💾 데이터 셋
-- [ICDAR2017_Mlt](https://rrc.cvc.uab.es/?ch=8) 데이터 셋 : 총 9000 장 중 한글과 영어로 이루어진 1063 장
-- [ICDAR19_ArT](https://rrc.cvc.uab.es/?ch=14) 데이터 셋 : 총 5603 장 중 영어로 이루어진 2846 장
-- [야외 실제 촬영 한글 이미지](https://aihub.or.kr/aidata/33985) 데이터 셋 샘플: 한글로 된 1140 장 전체
+- `ICDAR2017_Mlt 데이터 셋` : 총 9000 장 중 한글과 영어로 이루어진 1063 장
+- `ICDAR19_ArT 데이터 셋` : 총 5603 장 중 영어로 이루어진 2846 장
+- `야외 실제 촬영 한글 이미지 데이터 셋`: 샘플 데이터 1140 장
 
 ---
 
@@ -40,7 +38,7 @@
 
 ## 🧪 실험
 
-### 데이터 관점
+### 📝 데이터 관점
 
 | Data | LB Score@public | LB Score@private |
 | :-: | :-: | :-: |
@@ -51,34 +49,23 @@
 
 
 
-- **결론** **:** ICDAR17 Korean만 사용했을 때보다 외부 데이터를 추가할수록 private score에서 좋은 성능을 보였다.
+- ICDAR17 Korean 만 사용했을 때보다 외부 데이터를 추가할수록 private score에서 좋은 성능을 보였다.
 <br>
 
-### Hyperparameter & Augmentation 관점
+### 📌 Hyperparameter & Augmentation 관점
 
-- ICDAR17 Korean 데이터
-    - resize = 1200, crop = 256 
-        - LB Score@public : 0.3800
-        - LB Score@private : 0.4277
-    - resize = 1200, crop = 800
-        - LB Score@public :  0.3601  
-        - LB Score@private : 0.3671   
+- ICDAR17 Korean 데이터 (Resize, Crop)
+    - 1200, 256 (public: 0.3800, private: 0.4277)
+    - 1200, 800 (public: 0.3601, private: 0.3671)
 
-- ICDAR17 Korean 데이터
-    - Adam
-        - LB Score@public : 0.4486
-        - LB Score@private : 0.4686
-    - AdamW
-        - LB Score@public : 0.4723
-        - LB Score@private : 0.4848 
+- ICDAR17 Korean 데이터 (Adam, AdamW)
+    - Adam (public: 0.4486, private: 0.4686)
+    - AdamW (public: 0.4723, private: 0.4848)
  
-- ICDAR17, ICDAR19 데이터
-    - epoch=200
-        - LB Score@public : 0.5940
-        - LB Score@private : 0.5981
-    - epoch=300
-        - LB Score@public : 0.6141 
-        - LB Score@private : 0.6295
+- ICDAR17, ICDAR19 데이터 (epoch 200, epoch 300)
+    - 200 (public: 0.5940, private: 0.5981)
+    - 300 (public: 0.6141, private: 0.6295)
+
 
 ---
 
