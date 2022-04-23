@@ -63,7 +63,7 @@
     - resize = 1200, crop = 800
         - LB Score@public :  0.3601  
         - LB Score@private : 0.3671   
-<br>
+
 - ICDAR17 Korean 데이터
     - Adam
         - LB Score@public : 0.4486
@@ -71,7 +71,7 @@
     - AdamW
         - LB Score@public : 0.4723
         - LB Score@private : 0.4848 
-<br>
+        - 
 - ICDAR17, ICDAR19 데이터
     - epoch=200
         - LB Score@public : 0.5940
