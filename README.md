@@ -71,7 +71,7 @@
     - AdamW
         - LB Score@public : 0.4723
         - LB Score@private : 0.4848 
-        - 
+ 
 - ICDAR17, ICDAR19 데이터
     - epoch=200
         - LB Score@public : 0.5940
